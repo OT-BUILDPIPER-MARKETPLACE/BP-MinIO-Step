@@ -33,7 +33,7 @@ function fetch_service_details() {
     fi
 
     # Path to the mavenrepos.json file
-    local json_file="$LOCAL_REPO_DIR/mavenrepos.json"
+    local json_file="$LOCAL_REPO_DIR/$SOURCE_JSON_FILE"
 
     # Check if mavenrepos.json exists
     if [ ! -f "$json_file" ]; then
@@ -67,18 +67,22 @@ function fetch_service_details() {
     fi
 
     # Extract the specific details and export them as environment variables
-    export ENCRYPTED_TELEGRAM_TOKEN=$(echo "$service_data" | jq -r '.ENCRYPTED_TELEGRAM_TOKEN')
+    export ENCRYPTED_MINIO_ACCESS_KEY=$(echo "$service_data" | jq -r '.ENCRYPTED_MINIO_ACCESS_KEY')
+    export ENCRYPTED_MINIO_SECRET_KEY=$(echo "$service_data" | jq -r '.ENCRYPTED_MINIO_SECRET_KEY')
 
     # Decrypt the token using the getDecryptedCredential function
-    TELEGRAM_TOKEN=$(getDecryptedCredential "$FERNET_KEY" "$ENCRYPTED_TELEGRAM_TOKEN")
+    MINIO_ACCESS_KEY=$(getDecryptedCredential "$FERNET_KEY" "$ENCRYPTED_MINIO_ACCESS_KEY")
+    MINIO_SECRET_KEY=$(getDecryptedCredential "$FERNET_KEY" "$ENCRYPTED_MINIO_SECRET_KEY")
 
-    if [ -z "$TELEGRAM_TOKEN" ]; then
-        echo "Error: Failed to decrypt TELEGRAM_TOKEN."
+    if [ -z "$MINIO_ACCESS_KEY" ] || [ -z "$MINIO_SECRET_KEY" ]; then
+        echo "Error: Failed to decrypt MINIO_ACCESS_KEY or MINIO_SECRET_KEY."
         exit 1
     fi
-    
-    export TELEGRAM_CHAT_ID=$(echo "$service_data" | jq -r '.TELEGRAM_CHAT_ID')
-    export DNS_URL=$(echo "$service_data" | jq -r '.DNS_URL')
+
+    export MINIO_ENDPOINT=$(echo "$service_data" | jq -r '.MINIO_ENDPOINT')
+    export MINIO_BUCKET=$(echo "$service_data" | jq -r '.MINIO_BUCKET')
+    export MINIO_DEST_PATH=$(echo "$service_data" | jq -r '.MINIO_DEST_PATH')
+    export MINIO_SOURCE_PATH=$(echo "$service_data" | jq -r '.MINIO_SOURCE_PATH')
 
     # Remove the cloned repository
     echo "Removing the cloned repository..."

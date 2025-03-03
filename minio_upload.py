@@ -2,33 +2,33 @@ from minio import Minio
 import argparse
 import os
 
-def parse_args_provision():
-    provision_parser = argparse.ArgumentParser(description='change implementation plan', usage="creating implementation plan to raise change")
-    try:
-        provision_parser.add_argument('-a', '--access_key', help='access_key')
-        provision_parser.add_argument('-c', '--secret_key', help='secret_key')
-        provision_parser.add_argument('-e', '--endpoint', help='host')
-        provision_parser.add_argument('-b', '--bucket_name', help='bucket_name')
-        provision_parser.add_argument('-d', '--destination_file', help='destination_file')
-        provision_parser.add_argument('-s', '--source_file', help='source_file')
-    except Exception as e:
-        raise
-    return provision_parser.parse_args()
-
 def upload(host, access_key, secret_key, bucket_name, destination_file, source_file):
     try:
-        client = Minio(host, access_key,secret_key,secure=False)
+        client = Minio(host, access_key, secret_key, secure=False)
         client.fput_object(bucket_name, destination_file, source_file)
-        print("{} successfully uploaded as object {} to bucket {}".format(source_file, destination_file, bucket_name))
+        print(f"{source_file} successfully uploaded as object {destination_file} to bucket {bucket_name}")
     except Exception as e:
-        print("Error while uploading object in minio -- {}".format(e))
+        print(f"Error while uploading object in MinIO -- {e}")
 
 if __name__ == "__main__":
-    args = parse_args_provision()
-    if os.path.isdir(args.source_file):
-        for file in os.listdir(args.source_file):
-            sourceFile = os.path.join(args.source_file, file)
-            destinatinFile = os.path.join(args.destination_file, file)
-            upload(args.endpoint, args.access_key, args.secret_key, args.bucket_name, destinatinFile, sourceFile)
+    # Get values from environment variables
+    endpoint = os.getenv("MINIO_ENDPOINT")
+    access_key = os.getenv("MINIO_ACCESS_KEY")
+    secret_key = os.getenv("MINIO_SECRET_KEY")
+    bucket_name = os.getenv("MINIO_BUCKET")
+    destination_file = os.getenv("MINIO_DEST_PATH")
+    source_file = os.getenv("MINIO_SOURCE_PATH")
+
+    # Check if required values are set
+    if not all([endpoint, access_key, secret_key, bucket_name, source_file, destination_file]):
+        print("Missing required environment variables.")
+        sys.exit(1)
+
+    if os.path.isdir(source_file):
+        for file in os.listdir(source_file):
+            sourceFile = os.path.join(source_file, file)
+            destinationFile = f"{destination_file}/{file}"
+            upload(endpoint, access_key, secret_key, bucket_name, destinationFile, sourceFile)
     else:
-        upload(args.endpoint, args.access_key, args.secret_key, args.bucket_name, args.destination_file, args.source_file)
+        upload(endpoint, access_key, secret_key, bucket_name, destination_file, source_file)
+        
