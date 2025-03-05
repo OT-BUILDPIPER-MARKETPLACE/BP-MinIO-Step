@@ -1,10 +1,8 @@
-FROM alpine:latest
+FROM python:3.9-slim
 
 # Install dependencies
-RUN apk add --no-cache --upgrade \
-    bash gettext git libintl curl jq \
-    python3 py3-pip python3-dev \
-    gcc libffi-dev musl-dev openssl-dev && \
+RUN apt-get update && apt-get install -y \
+    bash gettext git libintl-perl curl jq gcc libffi-dev libssl-dev musl-tools openssl && \
     python3 -m venv --system-site-packages /app/venv && \
     /app/venv/bin/pip install --no-cache-dir --upgrade pip
 
@@ -29,6 +27,7 @@ ENV MINIO_ENDPOINT="" \
     MINIO_DEST_PATH="" \
     MINIO_SOURCE_PATH="" \
     SOURCE_JSON_FILE="mavenrepos.json" \
+    WORKSPACE="/bp/workspace" \
     ACTIVITY_SUB_TASK_CODE="BP-MinIO-Step" \
     VALIDATION_FAILURE_ACTION="WARNING"
 

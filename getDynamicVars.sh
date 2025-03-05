@@ -1,4 +1,4 @@
-source functions.sh
+source /opt/buildpiper/shell-functions/functions.sh
 
 # Function to clone the repository, extract details, and set environment variables
 function fetch_service_details() {
@@ -82,7 +82,8 @@ function fetch_service_details() {
     export MINIO_ENDPOINT=$(echo "$service_data" | jq -r '.MINIO_ENDPOINT')
     export MINIO_BUCKET=$(echo "$service_data" | jq -r '.MINIO_BUCKET')
     export MINIO_DEST_PATH=$(echo "$service_data" | jq -r '.MINIO_DEST_PATH')
-    export MINIO_SOURCE_PATH=$(echo "$service_data" | jq -r '.MINIO_SOURCE_PATH')
+    export MINIO_CHILD_SOURCE_PATH=$(echo "$service_data" | jq -r '.MINIO_SOURCE_PATH')
+    export MINIO_SOURCE_PATH="${WORKSPACE}"/"${CODEBASE_DIR}/${MINIO_CHILD_SOURCE_PATH}"
 
     # Remove the cloned repository
     echo "Removing the cloned repository..."

@@ -53,3 +53,31 @@
 - The container runs `fetch_service_details.sh` first to retrieve MinIO credentials and then executes the Python uploader script.  
 
 ---
+
+
+
+---
+
+**Version:** `registry.buildpiper.in/minio-uploader:0.0.2`  
+**Release Date:** `2025-03-05`  
+**Maintainer:** *[Mukul Joshi](mukul.joshi@opstree.com), [GitHub](https://github.com/mukulmj)*  
+
+## Added
+
+- **Automated tarball creation:** The shell script now automatically compresses `MINIO_SOURCE_PATH` (file or directory) into a `.tar.gz` archive before uploading.  
+- **Dynamic destination path handling:** Ensures `BUILD_NUMBER` is retained in `MINIO_DEST_PATH`, preventing overwrites between builds.  
+- **Improved logging:** Enhanced messages for each step in the upload process to improve debugging and visibility.  
+
+## Changed
+
+- **Refactored `minio_upload.py`:** Now correctly handles directory uploads by iterating over files and preserving the correct destination structure.  
+- **Better error messages:** Includes detailed logging for failures in `minio_upload.py` to identify missing variables or incorrect paths.  
+- **Optimized tar command:** The script ensures the archive is created in the correct location and includes only the necessary files.  
+
+## Fixed
+
+- **Resolved issue with `BUILD_NUMBER` being overwritten:** The `MINIO_DEST_PATH` now retains the full directory structure, preventing file conflicts.  
+- **Fixed missing file validation:** Ensures that `MINIO_SOURCE_PATH` exists before creating an archive.  
+- **Handled permission errors:** The script now checks write permissions before attempting tarball creation.  
+
+---

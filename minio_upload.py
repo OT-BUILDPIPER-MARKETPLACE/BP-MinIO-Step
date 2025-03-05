@@ -1,6 +1,7 @@
 from minio import Minio
 import argparse
 import os
+import sys
 
 def upload(host, access_key, secret_key, bucket_name, destination_file, source_file):
     try:
