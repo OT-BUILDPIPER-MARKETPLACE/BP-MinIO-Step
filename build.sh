@@ -74,7 +74,7 @@ else
 fi
 
 logInfoMessage "Updating reports in /bp/execution_dir/${GLOBAL_TASK_ID}......."
-cp -rf reports/* /bp/execution_dir/${GLOBAL_TASK_ID}/
+cp -rf ${WORKSPACE}"/"${CODEBASE_DIR}/reports/* /bp/execution_dir/${GLOBAL_TASK_ID}/
 
 TASK_STATUS=$?
 
