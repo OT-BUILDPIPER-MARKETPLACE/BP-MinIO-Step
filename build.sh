@@ -73,6 +73,9 @@ else
     logErrorMessage "Skipping minio_upload.py due to task failure."
 fi
 
+logInfoMessage "Updating reports in /bp/execution_dir/${GLOBAL_TASK_ID}......."
+cp -rf ${WORKSPACE}"/"${CODEBASE_DIR}/reports/* /bp/execution_dir/${GLOBAL_TASK_ID}/
+
 TASK_STATUS=$?
 
 saveTaskStatus ${TASK_STATUS} ${ACTIVITY_SUB_TASK_CODE}

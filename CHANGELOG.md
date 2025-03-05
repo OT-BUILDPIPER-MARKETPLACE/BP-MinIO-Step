@@ -1,4 +1,4 @@
-# **Change Log for Docker Image: `registry.buildpiper.in/minio-uploader`**  
+# **Change Log for Docker Image: `registry.buildpiper.in/minio-uploader:0.0.1`**  
 
 ---
 
@@ -54,7 +54,7 @@
 
 ---
 
-
+### **Change Log for Docker Image: `registry.buildpiper.in/minio-uploader:0.0.2`**  
 
 ---
 
@@ -79,5 +79,37 @@
 - **Resolved issue with `BUILD_NUMBER` being overwritten:** The `MINIO_DEST_PATH` now retains the full directory structure, preventing file conflicts.  
 - **Fixed missing file validation:** Ensures that `MINIO_SOURCE_PATH` exists before creating an archive.  
 - **Handled permission errors:** The script now checks write permissions before attempting tarball creation.  
+
+---
+
+### **Change Log for Docker Image: `registry.buildpiper.in/minio-uploader:0.0.3`**  
+
+---
+
+**Version:** `registry.buildpiper.in/minio-uploader:0.0.3`  
+**Release Date:** `2025-03-05`  
+**Maintainer:** *[Mukul Joshi](mukul.joshi@opstree.com), [GitHub](https://github.com/mukulmj)*  
+
+## **Added**  
+
+- **Report Publishing to Workspace Publisher:**  
+  - Logs report update using:  
+
+    ```bash
+    logInfoMessage "Updating reports in /bp/execution_dir/${GLOBAL_TASK_ID}......."
+    cp -rf ${WORKSPACE}"/"${CODEBASE_DIR}/reports/* /bp/execution_dir/${GLOBAL_TASK_ID}/
+    ```  
+
+  - Ensures reports are available for workspace publishing.  
+
+## **Changed**  
+
+- **Updated Logging & Validation:**  
+  - Logs messages when reports are copied for better visibility.  
+
+## **Fixed**  
+
+- **Ensured Report Directory is Updated Correctly:**  
+  - Copies reports reliably to `/bp/execution_dir/${GLOBAL_TASK_ID}/`.  
 
 ---
