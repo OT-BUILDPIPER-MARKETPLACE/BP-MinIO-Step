@@ -1,0 +1,4 @@
+# bp.yaml
+image:
+  name: registry.buildpiper.in/minio-uploader
+  tag: 0.0.2
